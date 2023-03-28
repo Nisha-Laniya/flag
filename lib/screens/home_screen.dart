@@ -1,8 +1,8 @@
-import 'dart:math';
-
+import 'package:flag/provider/country_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,42 +12,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var element = 'Germany';
-  var correctAnswer = 1;
+
   var score = 0;
-  List<String> countryList = [
-    'Estonia',
-    'France',
-    'Germany',
-    'Ireland',
-    'Italy',
-    'Monaco',
-    'Nigeria',
-    'Poland',
-    'Russia',
-    'Spain',
-    'UK',
-    'US'
-  ];
-
-  void changeQuestion() {
-    //TO get three flag including correct flag with different Index
-    Random random = new Random();
-    int min = 0, max = 3;
-    correctAnswer = (min + random.nextInt(max - min));
-    print(correctAnswer);
-
-    //for three item shuffled list
-    countryList.shuffle();
-    // Iterable<String> shuffledList = countryList.take(3);
-    print(countryList.take(3));
-
-    //for question item
-    element = countryList.elementAt(0);
-  }
 
   @override
   Widget build(BuildContext context) {
+    print('build');
+    final countryProvider = Provider.of<CountryProvider>(context,listen:false);
     return Scaffold(
       backgroundColor: Colors.pink[700],
       body: Stack(children: [
@@ -94,76 +65,92 @@ class _HomeScreenState extends State<HomeScreen> {
                               TextStyle(color: Colors.grey[700], fontSize: 15.sp),
                         ),
                       ),
-                      Text(
-                        countryList[correctAnswer],
-                        style: TextStyle(
-                            fontSize: 40.sp, fontWeight: FontWeight.w500),
+                      Consumer<CountryProvider>(
+                        builder: (context,value,child) {
+                          return Text(
+                            countryList[value.correctAnswer],
+                            style: TextStyle(
+                                fontSize: 40.sp, fontWeight: FontWeight.w500),
+                          );
+                        },
                       ),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          if (correctAnswer == 0) {
-                            score++;
-                            print('correct');
-                            if (score == 7) {
-                              _finalDialog(context);
-                            }
-                            changeQuestion();
-                          } else {
-                            _showDialog(context, 0);
-                          }
-                        }),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(80).w,
-                          child: Image.asset(
-                            'assets/images/${countryList[0]}.png',
-                            height: 110.h,
-                            width: 200.w,
-                          ),
-                        ),
+                      Consumer<CountryProvider>(
+                        builder: (context,value,child) {
+                          return  GestureDetector(
+                              onTap: () {
+                                if (value.correctAnswer == 0) {
+                                  score++;
+                                  print('correct');
+                                  if (score == 7) {
+                                    _finalDialog(context);
+                                  }
+                                  value.changeQuestion();
+                                } else {
+                                  _showDialog(context, 0);
+                                }
+                              },
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(80).w,
+                                child: Image.asset(
+                                'assets/images/${countryList[0]}.png',
+                                height: 110.h,
+                                width: 200.w,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          if (correctAnswer == 1) {
-                            score++;
-                            print('correct');
-                            if (score == 7) {
-                              _finalDialog(context);
-                            }
-                            changeQuestion();
-                          } else {
-                            _showDialog(context, 1);
-                          }
-                        }),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(80).w,
-                          child: Image.asset(
-                            'assets/images/${countryList[1]}.png',
-                            height: 110.h,
-                            width: 200.w,
-                          ),
-                        ),
+                      Consumer<CountryProvider>(
+                        builder: (context,value,child) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (value.correctAnswer == 1) {
+                                score++;
+                                print('correct');
+                                if (score == 7) {
+                                  _finalDialog(context);
+                                }
+                                value.changeQuestion();
+                              } else {
+                                _showDialog(context, 1);
+                              }
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(80).w,
+                              child: Image.asset(
+                                'assets/images/${countryList[1]}.png',
+                                height: 110.h,
+                                width: 200.w,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          if (correctAnswer == 2) {
-                            score++;
-                            print('correct');
-                            if (score == 7) {
-                              _finalDialog(context);
-                            }
-                            changeQuestion();
-                          } else {
-                            _showDialog(context, 2);
-                          }
-                        }),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(80),
-                          child: Image.asset(
-                            'assets/images/${countryList[2]}.png',
-                            height: 110.h,
-                            width: 200.w,
-                          ),
-                        ),
+                      Consumer<CountryProvider>(
+                        builder: (context,value,child) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (value.correctAnswer == 2) {
+                                score++;
+                                print('correct');
+                                if (score == 7) {
+                                  _finalDialog(context);
+                                }
+                                value.changeQuestion();
+                              } else {
+                                _showDialog(context, 2);
+                              }
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(80),
+                              child: Image.asset(
+                                'assets/images/${countryList[2]}.png',
+                                height: 110.h,
+                                width: 200.w,
+                              ),
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -171,15 +158,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20).r,
-              child: InkWell(
-                  child: Text(
-                'Score: $score',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700),
-              )),
+              padding: const EdgeInsets.only(top: 20).r,
+              child: Consumer<CountryProvider>(
+                builder: (context,value,child) {
+                  return Text(
+                    'Score: $score',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -197,15 +187,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text("Wrong! That's a flag of ${countryList[index]}"),
               ],
             ),
-            content: new Text("Your Score is $score"),
+            content: Text("Your Score is $score"),
             actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text("Continue"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    changeQuestion();
-                  });
+              Consumer<CountryProvider>(
+                builder: (context,value,child) {
+                  return CupertinoDialogAction(
+                    child: const Text("Continue"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                        value.changeQuestion();
+                    },
+                  );
                 },
               ),
             ],
@@ -219,20 +211,22 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Column(
-              children: <Widget>[
+              children: const <Widget>[
                 Text("Final Score"),
               ],
             ),
-            content: new Text("Your Score is $score"),
+            content: Text("Your Score is $score"),
             actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text("Restart"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    score = 0;
-                    changeQuestion();
-                  });
+              Consumer<CountryProvider>(
+                builder: (context,value,child) {
+                  return CupertinoDialogAction(
+                    child: const Text("Restart"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                        score = 0;
+                        value.changeQuestion();
+                    },
+                  );
                 },
               ),
             ],

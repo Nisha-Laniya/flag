@@ -1,6 +1,8 @@
+import 'package:flag/provider/country_provider.dart';
 import 'package:flag/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +18,16 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context,child) {
-        return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: HomeScreen()
+        return ChangeNotifierProvider(
+          create: (_) => CountryProvider(),
+          child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: HomeScreen()
+          ),
         );
       },
     );
