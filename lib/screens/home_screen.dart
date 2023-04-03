@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flag/provider/country_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   var score = 0;
+  double opacityLevel = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context,value,child) {
                           return  GestureDetector(
                               onTap: () {
+                                // setState(() {
+                                //   opacityLevel = opacityLevel == 0 ? 1 : 0;
+                                //   Timer(Duration(milliseconds: 800), () {
+                                //     setState(() {
+                                //       opacityLevel = opacityLevel == 0 ? 1 : 0;
+                                //     });
+                                //   });
+                                // });
                                 if (value.correctAnswer == 0) {
                                   score++;
                                   print('correct');
@@ -86,15 +98,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }
                                   value.changeQuestion();
                                 } else {
+                                  Vibration.vibrate();
                                   _showDialog(context, 0);
                                 }
                               },
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(80).w,
-                                child: Image.asset(
-                                'assets/images/${countryList[0]}.png',
-                                height: 110.h,
-                                width: 200.w,
+                            child: AnimatedOpacity(
+                              opacity: opacityLevel,
+                              duration: const Duration(milliseconds: 500),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(80).w,
+                                  child: Image.asset(
+                                  'assets/images/${countryList[0]}.png',
+                                  height: 110.h,
+                                  width: 200.w,
+                                ),
                               ),
                             ),
                           );
@@ -112,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                                 value.changeQuestion();
                               } else {
+                                Vibration.vibrate();
                                 _showDialog(context, 1);
                               }
                             },
@@ -138,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                                 value.changeQuestion();
                               } else {
+                                Vibration.vibrate();
                                 _showDialog(context, 2);
                               }
                             },
